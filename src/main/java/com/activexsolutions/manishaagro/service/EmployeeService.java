@@ -37,20 +37,21 @@ public class EmployeeService {
     }
 
     public Employee createOrUpdateEmployee(Employee employee) {
-        if (!employee.getEmpId().isEmpty()) {
-            employee = employeeRepository.save(employee);
-            return employee;
-        } else {
-            if (employeeRepository.findById(employee.getEmpId()).isPresent()) {
-                Employee newEntity = employee;
-                newEntity.setName("updated");
-                newEntity = employeeRepository.save(newEntity);
-                return newEntity;
+        if (employee.getEmpId().isEmpty()) {
+            Optional<Employee> employeeObject = employeeRepository.findById(employee.getEmpId());
+            if (employeeObject.isPresent()) {
+                employeeObject.get().setName(employee.getName());
+                employeeObject.get().setDesignation(employee.getDesignation());
+                employeeObject.get().setContactDetail(employee.getContactDetail());
+                employeeObject.get().setEmailId(employee.getEmailId());
+                employee = employeeRepository.save(employeeObject.get());
             } else {
                 employee = employeeRepository.save(employee);
-                return employee;
             }
+        } else {
+            employee = employeeRepository.save(employee);
         }
+        return employee;
     }
 
     public void deleteEmployeeById(final String id) throws Exception {

@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping ("/")
+@RequestMapping("/")
 public class EmployeeController {
 
     @Autowired
     private
     EmployeeService employeeService;
 
-    @RequestMapping (method = RequestMethod.GET, value = "/getEmployeeDetails/{empId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/getEmployeeDetails/{empId}")
     public List<Employee> getEmployeeDetails(@RequestParam final String empId) {
         return employeeService.getAllEmployees();
     }
@@ -33,8 +33,8 @@ public class EmployeeController {
         return "list-employees";
     }
 
-    @RequestMapping (path = {"/edit", "/edit/{id}"})
-    public String editEmployeeById(final Model model, @PathVariable ("id") final Optional<String> id) throws Exception {
+    @RequestMapping(path = {"/edit", "/edit/{id}"})
+    public String editEmployeeById(final Model model, @PathVariable("id") final Optional<String> id) throws Exception {
         if (id.isPresent()) {
             final Employee entity = employeeService.getEmployeeById(id.get());
             model.addAttribute("employee", entity);
@@ -42,15 +42,15 @@ public class EmployeeController {
         return "add-edit-employee";
     }
 
-    @RequestMapping (path = "/delete/{id}")
-    public String deleteEmployeeById(final Model model, @PathVariable ("id") final String id) throws Exception {
+    @RequestMapping(path = "/delete/{id}")
+    public String deleteEmployeeById(final Model model, @PathVariable("id") final String id) throws Exception {
         employeeService.deleteEmployeeById(id);
         return "redirect:/";
     }
 
-    @RequestMapping (path = "/createEmployee", method = RequestMethod.POST)
+    @RequestMapping(path = "/createEmployee", method = RequestMethod.POST)
     public String createOrUpdateEmployee(final Employee employee) {
-        employeeService.createOrUpdateEmployee(employee);
+        Employee updateEmployee = employeeService.createOrUpdateEmployee(employee);
         return "redirect:/";
     }
 }
